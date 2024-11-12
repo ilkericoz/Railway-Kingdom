@@ -1,0 +1,285 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#menu-screen,
+#game-screen {
+  display: none;
+  text-align: center;
+  margin-top: 50px;
+}
+
+#menu-screen.visible {
+  display: block;
+}
+
+#game-screen.visible {
+  display: block;
+}
+
+.difficulty-selector {
+  margin: 15px 0;
+}
+
+.button {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+.rules-box {
+  margin-top: 15px;
+  display: none;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.rules-box.visible {
+  display: block;
+}
+
+footer {
+  margin-top: 30px;
+  font-size: 14px;
+  color: grey;
+}
+
+#grid-container {
+  display: grid;
+  gap: 0px;
+  margin: 0 auto;
+}
+
+.tile {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-color: lightgray;
+  border: 1px solid #333;
+  position: relative;
+}
+
+/* Empty Tile */
+.tile[data-type="E"] {
+  background-image: url("/pics/tiles/empty.png");
+}
+
+/* Bridge Tiles */
+.tile[data-type="B"].bridge_horizontal {
+  background-image: url("/pics/tiles/bridge_horizontal.png");
+}
+
+.tile[data-type="B"].bridge_vertical {
+  background-image: url("/pics/tiles/bridge_vertical.png");
+}
+
+.tile[data-type="B"].bridge_rail_horizontal::before {
+  content: "";
+  background-image: url("/pics/tiles/bridge_rail_horizontal.png");
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tile[data-type="B"].bridge_rail_vertical::before {
+  content: "";
+  background-image: url("/pics/tiles/bridge_rail_vertical.png");
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Mountain Tiles */
+.tile[data-type="M"].mountain_empty_0 {
+  background-image: url("/pics/tiles/mountain_top_right.png");
+}
+
+.tile[data-type="M"].mountain_empty_1 {
+  background-image: url("/pics/tiles/mountain_top_left.png");
+}
+
+.tile[data-type="M"].mountain_empty_2 {
+  background-image: url("/pics/tiles/mountain_bottom_left.png");
+}
+
+.tile[data-type="M"].mountain_empty_3 {
+  background-image: url("/pics/tiles/mountain_bottom_right.png");
+}
+
+/* Mountain Track Overlays */
+.tile.mountain_rail_0::before {
+  content: "";
+  background-image: url("/pics/tiles/mountain_rail_top_right.png");
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tile.mountain_rail_1::before {
+  content: "";
+  background-image: url("/pics/tiles/mountain_rail_top_left.png");
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tile.mountain_rail_2::before {
+  content: "";
+  background-image: url("/pics/tiles/mountain_rail_bottom_left.png");
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tile.mountain_rail_3::before {
+  content: "";
+  background-image: url("/pics/tiles/mountain_rail_bottom_right.png");
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Oasis Tile */
+.tile[data-type="O"] {
+  background-image: url("/pics/tiles/oasis.png");
+}
+
+/* Straight and Corner Tracks on Empty Tiles */
+.tile[data-type="E"].straight-0::before {
+  content: "";
+  background-image: url("/pics/tiles/straight_rail_horizontal.png");
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tile[data-type="E"].straight-1::before {
+  content: "";
+  background-image: url("/pics/tiles/straight_rail_vertical.png");
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tile[data-type="E"].corner-0::before {
+  content: "";
+  background-image: url("/pics/tiles/curve_top_right.png");
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tile[data-type="E"].corner-1::before {
+  content: "";
+  background-image: url("/pics/tiles/curve_top_left.png");
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tile[data-type="E"].corner-2::before {
+  content: "";
+  background-image: url("/pics/tiles/curve_bottom_left.png");
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tile[data-type="E"].corner-3::before {
+  content: "";
+  background-image: url("/pics/tiles/curve_bottom_right.png");
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.difficulty-options {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.difficulty-options label {
+  margin-bottom: 8px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.modal-content p {
+  margin-bottom: 20px;
+}
+
+.modal-content button {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.modal-content button:hover {
+  background-color: #45a049;
+}
