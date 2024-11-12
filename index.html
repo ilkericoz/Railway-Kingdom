@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Kingdom's Railway Network</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      #menu-screen,
+      #game-screen {
+        display: none;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      #menu-screen.visible {
+        display: block;
+      }
+
+      #game-screen.visible {
+        display: block;
+      }
+
+      .difficulty-selector {
+        margin: 15px 0;
+      }
+
+      .button {
+        padding: 10px 20px;
+        cursor: pointer;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .button:hover {
+        background-color: #45a049;
+      }
+
+      .rules-box {
+        margin-top: 15px;
+        display: none;
+      }
+
+      .rules-box.visible {
+        display: block;
+      }
+
+      footer {
+        margin-top: 30px;
+        font-size: 14px;
+        color: grey;
+      }
+
+      #grid-container {
+        margin: 20px auto;
+        display: grid;
+        gap: 2px; /* Small gap between the tiles */
+      }
+
+      .tile {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: 18px;
+        background-size: cover;
+        cursor: pointer;
+        background-color: lightgray;
+        border: 1px solid #333;
+      }
+
+      .tile[data-type="E"] {
+        background-image: url("/pics/tiles/empty.png"); /* Empty */
+      }
+
+      /* Mountain Tiles with Different Rotations */
+      .tile[data-type="M"][data-rotationIndex="0"] {
+        background-image: url("/pics/tiles/mountain_0.png"); /* Top-right */
+      }
+
+      .tile[data-type="M"][data-rotationIndex="1"] {
+        background-image: url("/pics/tiles/mountain_1.png"); /* Top-left */
+      }
+
+      .tile[data-type="M"][data-rotationIndex="2"] {
+        background-image: url("/pics/tiles/mountain_2.png"); /* Bottom-left */
+      }
+
+      .tile[data-type="M"][data-rotationIndex="3"] {
+        background-image: url("/pics/tiles/mountain_3.png"); /* Bottom-right */
+      }
+
+      /* Bridge Tiles with Horizontal and Vertical Orientations */
+      .tile[data-type="B"][data-rotationIndex="0"] {
+        background-image: url("/pics/tiles/bridge_horizontal.png");
+      }
+
+      .tile[data-type="B"][data-rotationIndex="1"] {
+        background-image: url("/pics/tiles/bridge_vertical.png");
+      }
+
+      .tile[data-type="O"] {
+        background-image: url("/pics/tiles/oasis.png"); /* Desert/Oasis in brown */
+      }
+
+      /* Horizontal and vertical straight pieces */
+      /* Add background images for the railway elements */
+
+      /* Straight Railway Pieces */
+      /* Bridge and Mountain Tile with Railway Track Overlay */
+
+      /* Straight Railway Pieces on Bridges */
+      .tile[data-type="B"].straight-0::before {
+        content: "";
+        background-image: url("/pics/tiles/straight_bridge_horizontal.png");
+        background-size: cover;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .tile[data-type="B"].straight-1::before {
+        content: "";
+        background-image: url("/pics/tiles/straight_bridge_vertical.png");
+        background-size: cover;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Corner Railway Pieces on Mountains */
+      .tile[data-type="M"].corner-0::before {
+        content: "";
+        background-image: url("/pics/tiles/curve_mountain_top_right.png");
+        background-size: cover;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .tile[data-type="M"].corner-1::before {
+        content: "";
+        background-image: url("/pics/tiles/curve_mountain_top_left.png");
+        background-size: cover;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .tile[data-type="M"].corner-2::before {
+        content: "";
+        background-image: url("/pics/tiles/curve_mountain_bottom_left.png");
+        background-size: cover;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .tile[data-type="M"].corner-3::before {
+        content: "";
+        background-image: url("/pics/tiles/curve_mountain_bottom_right.png");
+        background-size: cover;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Menu Screen -->
+    <div id="menu-screen" class="visible">
+      <h1>Welcome to The Kingdom's Railway Network!</h1>
+
+      <!-- Player Name Input -->
+      <div>
+        <label for="player-name">Enter your name: </label>
+        <input type="text" id="player-name" placeholder="Your name" required />
+      </div>
+
+      <!-- Difficulty Selection -->
+      <div class="difficulty-selector">
+        <label for="difficulty">Choose Difficulty: </label>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+
+      <!-- Start Button -->
+      <button id="start-button" class="button">Start Game</button>
+
+      <!-- Game Rules -->
+      <div>
+        <button id="rules-button" class="button">Game Rules</button>
+      </div>
+      <div id="rules-box" class="rules-box">
+        <h3>Game Rules</h3>
+        <p>
+          The game is played on a grid where the goal is to create a continuous
+          circular railway...
+        </p>
+        <ul>
+          <li>Use the terrain tiles to build a railway network.</li>
+          <li>
+            Bridges can only go straight, mountains force turns, no railway on
+            oases.
+          </li>
+          <li>
+            The railway must form a complete loop without crossing or branching.
+          </li>
+        </ul>
+        <button id="close-rules" class="button">Close Rules</button>
+      </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen">
+      <h2>Player: <span id="player-display"></span></h2>
+      <p>Difficulty: <span id="difficulty-display"></span></p>
+      <p>Timer: <span id="timer-display">00:00</span></p>
+      <!-- Placeholder for game grid and other elements -->
+      <div id="grid-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
